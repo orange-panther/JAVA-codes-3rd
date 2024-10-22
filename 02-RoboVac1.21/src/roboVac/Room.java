@@ -68,8 +68,10 @@ public class Room {
         }
 
         matrix[pos.y][pos.x] = 0;
+        queue.add(pos);
 
-        do {
+        while (!queue.isEmpty()) {
+            pos = queue.removeFirst();
             var neighbours = pos.getNeighbours();
             int numToWrite = matrix[pos.y][pos.x] + 1;
             for (var curPos : neighbours) {
@@ -78,9 +80,7 @@ public class Room {
                     matrix[curPos.y][curPos.x] = numToWrite;
                 }
             }
-            pos = queue.getFirst();
-            queue.removeFirst();
-        } while (!queue.isEmpty());
+        }
 
         return matrix;
     }

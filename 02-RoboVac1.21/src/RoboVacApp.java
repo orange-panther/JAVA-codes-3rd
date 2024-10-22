@@ -31,6 +31,6 @@ public class RoboVacApp {
         myRoboVac.setRoom(new Room(moveToTargetRoom));
         myRoboVac.setPosition(new Position(1, 1));
         myRoboVac.clean();
-        //myRoboVac.clean();
+        myRoboVac.clean();
     }
 }

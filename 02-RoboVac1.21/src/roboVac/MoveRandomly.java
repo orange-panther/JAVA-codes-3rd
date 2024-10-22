@@ -25,8 +25,6 @@ public class MoveRandomly implements MoveBehaviour {
         if (rand.nextInt(10) == 0) {
             dirIndex = rand.nextInt(neighbours.length);
         }
-        // Todo: Change to delete nextPos as soon as you know it works
-        var nextPos = neighbours[dirIndex];
-        return nextPos;
+        return neighbours[dirIndex];
     }
 }

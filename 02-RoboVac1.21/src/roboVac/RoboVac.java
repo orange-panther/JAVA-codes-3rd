@@ -1,7 +1,5 @@
 package roboVac;
 
-import jdk.jshell.spi.ExecutionControl;
-
 public class RoboVac {
     private String name;
     private Room room;
