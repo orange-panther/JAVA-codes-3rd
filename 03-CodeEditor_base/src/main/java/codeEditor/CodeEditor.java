@@ -1,12 +1,6 @@
 package codeEditor;
 
-import javax.swing.*;
-import javax.swing.text.DefaultFormatter;
-import java.util.Arrays;
-import java.util.List;
-
 public class CodeEditor {
-
     private StringBuilder text;
     private CodeType codeType;
 

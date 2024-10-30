@@ -12,7 +12,6 @@ public class HtmlFormatter implements CodeFormatter {
         this.text = text;
         StringBuilder formattedCode = new StringBuilder();
         pos = 0;
-        boolean newLine = true;
         nextChar();
 
         while (ch != EOF) {
@@ -36,6 +35,7 @@ public class HtmlFormatter implements CodeFormatter {
     }
 
     private boolean isHtmlCharacter(char ch) {
+        // we also check for digits (e.g. <h1> tag)
         return Character.isLetter(ch)
                 || ch == '-'
                 || Character.isDigit(ch);

@@ -9,11 +9,9 @@ public class FormulaFormatter implements CodeFormatter {
             "sin", "cos", "tan", "sqrt", "log", "ln", "exp"
     );
 
-
     private int pos;
     private char ch;
     private String text;
-
 
     @Override
     public String format(String text) {
@@ -58,7 +56,6 @@ public class FormulaFormatter implements CodeFormatter {
             }
         }
         return formattedCode.toString();
-
     }
 
     private void nextChar() {
@@ -68,7 +65,6 @@ public class FormulaFormatter implements CodeFormatter {
             ch = EOF;
         }
     }
-
 
     private String readAndFormatFormulaNumber() {
         StringBuilder formulaNumber = new StringBuilder();
@@ -114,5 +110,4 @@ public class FormulaFormatter implements CodeFormatter {
         }
 
     }
-
 }
