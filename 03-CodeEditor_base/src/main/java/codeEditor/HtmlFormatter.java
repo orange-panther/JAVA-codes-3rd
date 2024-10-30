@@ -53,14 +53,19 @@ public class HtmlFormatter implements CodeFormatter {
 
     private String readStringLiteral() {
         var literal = new StringBuilder();
+        // append the opening quote
         literal.append(ch);
         nextChar();
 
-        while (ch != '\"'){
+        // if the string is empty, it just skips this part
+        while (ch != '\"') {
             literal.append(ch);
             nextChar();
         }
 
+        // append the closing quote
+        literal.append(ch);
+        nextChar();
         return literal.toString();
     }
 
@@ -83,15 +88,16 @@ public class HtmlFormatter implements CodeFormatter {
                 tag.append(ConsoleColor.ANSI_PURPLE);
                 tag.append(readWord());
                 tag.append(ConsoleColor.ANSI_RESET);
-            }
-            if (ch == '\"') {
+            } else if (ch == '\"') {
                 tag.append(ConsoleColor.ANSI_GREEN);
                 tag.append(readStringLiteral());
                 tag.append(ConsoleColor.ANSI_RESET);
+            } else {
+                tag.append(ch);
+                nextChar();
             }
-            tag.append(ch);
-            nextChar();
         }
+        // append the '>'
         tag.append(ch);
 
         return tag.toString();
