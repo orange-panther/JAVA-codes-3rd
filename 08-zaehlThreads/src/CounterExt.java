@@ -1,16 +1,15 @@
 import java.time.Duration;
 import java.time.Instant;
 
-public class CounterExt extends Thread {
+public class CounterExt implements Runnable {
     public static volatile int totalCount = 0;
     public int maxTotalCount;
+    public String name;
 
     public CounterExt(String name, int max) {
-        super(name);
+        this.name = name;
         this.maxTotalCount = max;
     }
-
-
 
     @Override
     public void run() {
@@ -23,8 +22,10 @@ public class CounterExt extends Thread {
         while (CounterExt.totalCount < maxTotalCount) {
             synchronized (CounterExt.class) { // Synchronisation, um Datenkorruption zu vermeiden
                 if (CounterExt.totalCount < maxTotalCount) {
-                    CounterExt.totalCount += 1;
-                    threadCounter++;
+                    synchronized (this) {
+                        CounterExt.totalCount += 1;
+                        threadCounter++;
+                    }
                 }
             }
         }
@@ -32,8 +33,6 @@ public class CounterExt extends Thread {
         Instant end = Instant.now();
 
         var elapsedTime = Duration.between(start, end).toMillis();
-        System.out.printf("Name: %s, threadCount: %d, totalCount: %d, elapsedTime: %d milliseconds%n", getName(), threadCounter, totalCount, elapsedTime);
-
-        //System.out.printf("Name: %s, threadCount: %d, totalCount: %d%n", getName(), threadCounter, totalCount);
+        System.out.printf("Name: %s, threadCount: %d, totalCount: %d, elapsedTime: %d milliseconds%n", name, threadCounter, totalCount, elapsedTime);
     }
 }

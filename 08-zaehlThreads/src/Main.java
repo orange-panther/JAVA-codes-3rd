@@ -1,9 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        final int upperBound = 1000;
-        Thread tick = new CounterExt("Tick",upperBound);
-        Thread trick = new CounterExt("Trick",upperBound);
-        Thread track = new CounterExt("Track",upperBound);
+        final int upperBound = 100000;
+        Thread tick = new Thread(new CounterExt("Tick",upperBound), "Tick");
+        Thread trick = new Thread(new CounterExt("Trick",upperBound), "Trick");
+        Thread track = new Thread(new CounterExt("Track",upperBound), "Track");
 
         tick.start();
         trick.start();
