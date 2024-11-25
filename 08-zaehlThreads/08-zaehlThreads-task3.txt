@@ -1,0 +1,9 @@
+Experimentieren Sie ein wenig mit den Threads:
+• Was passiert bei sehr geringer Obergrenze (zB 50)?
+	die Dauer sind 0 Millisekunden, weil die Threads so schnell durchlaufen
+	manchmal kommen nur 2 oder sogar nur 1 Thread an die Reihe und die anderen gar nicht
+• Was passiert bei sehr hoher Obergrenze?
+	die Dauer steigt mit Anzahl der Schleifendurchläufe, ist aber immer noch gleich aufgeteilt
+• Erspart man sich in dem Beispiel Zeit durch die Parallelisierung?
+	Ich denke, ab einer gewissen Grenze definitiv, wenn es also sehr viele Durchläufe sind
+ 
