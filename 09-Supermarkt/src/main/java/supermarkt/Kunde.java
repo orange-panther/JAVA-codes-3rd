@@ -18,7 +18,7 @@ public class Kunde {
     // factory
     public static synchronized Kunde einkaufen() {
         Kunde kunde = new Kunde();
-        System.out.println("Einkauf von " + kunde.toString());
+        System.out.println(ConsoleColor.ANSI_RED + "Einkauf von " + kunde.toString() + ConsoleColor.ANSI_RESET);
         return kunde;
     }
 

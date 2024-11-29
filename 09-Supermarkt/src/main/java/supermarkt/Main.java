@@ -38,12 +38,12 @@ public class Main {
         } catch(InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.printf("Saldo Kassa 1: %7.2f EUR\n", kassa1.getSaldo());
-        System.out.printf("Saldo Kassa 2: %7.2f EUR\n", kassa2.getSaldo());
-
 
         // warte bis Generator und Kassa geschlossen haben
         // schließe den Supermarkt
+        System.out.println();
+        System.out.printf("Saldo Kassa 1: %7.2f EUR\n", kassa1.getSaldo());
+        System.out.printf("Saldo Kassa 2: %7.2f EUR\n", kassa2.getSaldo());
         System.out.println("Supermarkt ist geschlossen");
 
     }

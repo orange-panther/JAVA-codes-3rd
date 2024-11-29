@@ -27,7 +27,7 @@ public class KundenGen extends Thread {
             }
         } catch (InterruptedException ignore) {
         }
-        System.out.println("Kundengenerierung beendet");
+        System.out.println("\nKundengenerierung beendet");
     }
 
 }

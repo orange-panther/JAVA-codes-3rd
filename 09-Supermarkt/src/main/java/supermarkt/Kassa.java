@@ -28,9 +28,7 @@ public class Kassa extends Thread {
                         System.out.println("Kassa " + this.id + " wartet auf neuen Kunden");
                         queue.wait();
                     } else {
-                        Kunde polled = queue.poll();
-                        this.saldo += polled.getWarenwert();
-                        System.out.println("Kassa " + this.id + ": Zahlung von " + polled.toString());
+                        poll();
                         Thread.sleep(100);
                     }
                 }
@@ -43,14 +41,17 @@ public class Kassa extends Thread {
             synchronized (queue) {
                 System.out.println("Supermarkt schließt, letzte Kunden der Kassa " + this.id + " werden abgearbeitet");
                 while (!queue.isEmpty()) {
-                    Kunde polled = queue.poll();
-                    this.saldo += polled.getWarenwert();
-                    System.out.println("Kassa " + this.id + ": Zahlung von " + polled.toString());
+                   poll();
                 }
             }
             System.out.println("Kassa schließt");
         }
 
     }
-    
+
+    private void poll() {
+        Kunde polled = queue.poll();
+        this.saldo += polled.getWarenwert();
+        System.out.println(ConsoleColor.ANSI_GREEN + "Kassa " + this.id + ": Zahlung von " + polled.toString() + ConsoleColor.ANSI_RESET);
+    }
 }
