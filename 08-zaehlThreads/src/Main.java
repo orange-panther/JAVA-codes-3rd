@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        final int upperBound = 100000;
+        final int upperBound = 50000000;
         Thread tick = new Thread(new CounterExt("Tick",upperBound), "Tick");
         Thread trick = new Thread(new CounterExt("Trick",upperBound), "Trick");
         Thread track = new Thread(new CounterExt("Track",upperBound), "Track");

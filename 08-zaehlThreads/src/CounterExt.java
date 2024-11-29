@@ -3,7 +3,7 @@ import java.time.Instant;
 
 public class CounterExt implements Runnable {
     public static volatile int totalCount = 0;
-    public int maxTotalCount;
+    public final int maxTotalCount;
     public String name;
 
     public CounterExt(String name, int max) {
@@ -20,12 +20,11 @@ public class CounterExt implements Runnable {
         Instant start = Instant.now();
 
         while (CounterExt.totalCount < maxTotalCount) {
+            // man muss die ganze Klasse sperren, weil totalCount ja statisch ist
             synchronized (CounterExt.class) { // Synchronisation, um Datenkorruption zu vermeiden
                 if (CounterExt.totalCount < maxTotalCount) {
-                    synchronized (this) {
-                        CounterExt.totalCount += 1;
+                        CounterExt.totalCount++;
                         threadCounter++;
-                    }
                 }
             }
         }
