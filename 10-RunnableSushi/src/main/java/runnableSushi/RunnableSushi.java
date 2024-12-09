@@ -6,6 +6,8 @@ public class RunnableSushi {
         System.out.println("Runnable Sushi opens ...");
 
         // Create and start belt
+        var belt = new Belt(9);
+        belt.start();
 
         // Create and start cooks
 
@@ -20,8 +22,14 @@ public class RunnableSushi {
         // Clean the belt
 
         // Stop the belt
+        belt.interrupt();
 
         // Close Runnable Sushi
+        try {
+            belt.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
