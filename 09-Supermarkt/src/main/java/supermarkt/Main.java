@@ -21,18 +21,19 @@ public class Main {
 
         // warte Zeit (Öffnungszeit)
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e) ;
         }
 
-        // interrupt Kassa und Generator (schließe supermarkt)
-        kundenGen.interrupt();
-        kassa1.interrupt();
-        kassa2.interrupt();
-
         try {
+            // interrupt Kassa und Generator (schließe supermarkt)
+            kundenGen.interrupt();
             kundenGen.join();
+
+            kassa1.interrupt();
+            kassa2.interrupt();
+
             kassa1.join();
             kassa2.join();
         } catch(InterruptedException e) {

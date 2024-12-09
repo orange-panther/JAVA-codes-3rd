@@ -24,29 +24,36 @@ public class Kassa extends Thread {
         try {
             while (!isInterrupted()) {
                 synchronized (queue) {
-                    if(queue.isEmpty()) {
+                    if (queue.isEmpty()) {
                         System.out.println("Kassa " + this.id + " wartet auf neuen Kunden");
                         queue.wait();
                     } else {
                         poll();
-                        Thread.sleep(100);
                     }
                 }
+                Thread.sleep(500);
             }
         } catch (InterruptedException ignore) {
         }
 
-        if(!queue.isEmpty()) {
+        if (!queue.isEmpty()) {
             // arbeite Kunden ab, nachdem Kassa schließt
-            synchronized (queue) {
-                System.out.println("Supermarkt schließt, letzte Kunden der Kassa " + this.id + " werden abgearbeitet");
-                while (!queue.isEmpty()) {
-                   poll();
+            System.out.println("Supermarkt schließt, letzte Kunden der Kassa " + this.id + " werden abgearbeitet");
+            while (!queue.isEmpty()) {
+                synchronized (queue) {
+                    if (!queue.isEmpty()) {
+                        poll();
+                        queue.notifyAll();
+                    }
+                }
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-            System.out.println("Kassa schließt");
+            System.out.println("Kassa " + this.id + " schließt");
         }
-
     }
 
     private void poll() {

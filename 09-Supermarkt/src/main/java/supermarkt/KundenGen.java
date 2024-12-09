@@ -18,7 +18,7 @@ public class KundenGen extends Thread {
                 synchronized(queue) {
                     k = Kunde.einkaufen();
                     queue.offer(k);
-                    queue.notifyAll();// falls sich andere Threads mit Lock
+                    queue.notifyAll(); // falls sich andere Threads mit Lock
                     // auf queue im Wartezustand befinden, dann werden sie
                     // nun informiert, dass es einen neuen Kunden gibt
                 }
