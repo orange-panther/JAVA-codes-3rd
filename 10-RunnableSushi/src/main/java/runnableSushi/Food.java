@@ -29,6 +29,7 @@ public class Food {
      */
     @Override
     public String toString() {
-        return "%s-%s".formatted(this.foodType, this.id);
+        //return "%s-%s".formatted(this.foodType, this.id);
+        return this.id;
     }
 }

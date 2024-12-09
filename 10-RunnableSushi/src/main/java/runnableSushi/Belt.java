@@ -107,10 +107,11 @@ public class Belt extends Thread {
     public String toString() {
         var beltString = new StringBuilder();
         for (int i = 0; i < foodArr.length; i++) {
+            String foodString = foodArr[i] == null ? "..." : foodArr[i].toString();
             beltString.append("-")
                     .append(i)
                     .append(":")
-                    .append(foodArr[i].toString());
+                    .append(foodString);
         }
         return beltString.toString();
     }
