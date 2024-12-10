@@ -8,17 +8,18 @@ public class CleanerBehaviour implements ConsumerBehaviour {
         while (!Thread.interrupted()) {
             try {
                 synchronized (belt) {
-                    if (belt.isEmpty()) break;
-
+                    if (belt.isEmpty()) {
+                        break;
+                    }
                     while (belt.isFreeAtPosition(pos)) {
                         belt.wait();
                     }
-
                     var food = belt.remove(pos);
                     foodList.add(food);
-                    System.out.printf("*** %s consumed %s at position %d\n", name, food.toString(), pos);
+
+                    System.out.println(String.format("*** %s consumed %s at position %d", name, food.getId(), pos));
                 }
-            } catch (InterruptedException ignore) {
+            } catch (Exception ignore) {
                 break;
             }
         }

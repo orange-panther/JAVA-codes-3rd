@@ -122,11 +122,12 @@ public class Belt extends Thread {
             try {
                 synchronized (this) {
                     move();
-                    System.out.println(this.toString());
                     this.notifyAll();
+                    System.out.println(this.toString());
                 }
                 Thread.sleep(500);
             } catch (InterruptedException ignore) {
+                break;
             }
         }
         System.out.println("Belt stopped");

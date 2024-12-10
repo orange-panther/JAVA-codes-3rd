@@ -18,6 +18,7 @@ public class GuestBehaviour implements ConsumerBehaviour {
                 }
                 Thread.sleep((int) (1000 + Math.random() * 5001));
             } catch (InterruptedException ignore) {
+                break;
             }
         }
     }

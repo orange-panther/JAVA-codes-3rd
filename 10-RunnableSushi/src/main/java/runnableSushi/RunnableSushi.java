@@ -40,30 +40,33 @@ public class RunnableSushi {
         guestBob.interrupt();
         guestJoe.interrupt();
 
+        // Clean the belt
+        System.out.println("Start clean up");
+        var cleaner = new Consumer(ConsumerType.CLEANER, "Cleaner", belt, 0);
+        cleaner.start();
+
         try {
-            belt.join();
             cookS.join();
             cookA.join();
             guestAnn.join();
             guestBob.join();
             guestJoe.join();
+            cleaner.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Stop the belt
+        System.out.println("Stop belt");
+        belt.interrupt();
+
+        try {
+            belt.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         // Close Runnable Sushi
-        try {
-            // Clean the belt
-            System.out.println("Start clean up");
-            var cleaner = new Consumer(ConsumerType.CLEANER, "Cleaner", belt, 0);
-            cleaner.start();
-
-            // Stop the belt
-            cleaner.join();
-            belt.interrupt();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         System.out.println("Runnable Sushi closes");
     }
 
