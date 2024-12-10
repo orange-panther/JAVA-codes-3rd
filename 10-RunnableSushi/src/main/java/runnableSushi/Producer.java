@@ -1,5 +1,6 @@
 package runnableSushi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,8 @@ public class Producer extends Thread {
     private final Belt belt;
     private int pos;
     private List<Food> producedFood;
+
+    private int lastFoodId = 1;
 
     /**
      * Constructor
@@ -24,6 +27,7 @@ public class Producer extends Thread {
         this.foodType = foodType;
         this.belt = belt;
         this.pos = pos;
+        producedFood = new ArrayList<>();
     }
 
     /**
@@ -32,6 +36,9 @@ public class Producer extends Thread {
      * @return a string representation of all produced food
      */
     public String getProducedFood() {
+        if (producedFood == null) {
+            return "";
+        }
         return producedFood.stream()
                 .map(Food::toString)
                 .collect(Collectors.joining(" | "));
@@ -39,22 +46,25 @@ public class Producer extends Thread {
 
     @Override
     public void run() {
+        System.out.printf("Producer %s starts producing at position %d ...\n", name, pos);
         while (!isInterrupted()) {
             try {
-                System.out.printf("Producer %s starts producing at position %d ...\n", name, pos);
-                Thread.sleep((int) (1000 + Math.random() * 1001));
-                int curId = producedFood.size();
-                String foodId = name + "-" + curId;
-                var food = new Food(foodId, foodType);
+                var food = new Food(String.format("%s-%d", this.name, lastFoodId++), this.foodType);
+                producedFood.add(food);
+
                 synchronized (belt) {
+                    // waiting until position is empty
+                    while (!belt.isFreeAtPosition(pos)) {
+                        belt.wait();
+                    }
+
                     if (belt.add(food, pos)) {
-                        System.out.printf("*** %s placed %s at position $d\n", name, foodId, pos);
+                        System.out.printf("*** %s placed %s at position %d\n", name, food.getId(), pos);
                     }
                 }
-                producedFood.add(food);
-                // waiting until position is empty again
-                belt.wait();
+                Thread.sleep((int) (1000 + Math.random() * 1001));
             } catch (InterruptedException ignore) {
+                break;
             }
         }
         System.out.printf("Producer %s stopped\n", name);
