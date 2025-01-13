@@ -1,0 +1,62 @@
+package supermarkt;
+
+import java.util.Queue;
+
+public class Kassa extends Thread {
+
+    private int id;
+    private double saldo;
+    private Queue<Kunde> queue;
+
+    private static int nextId = 1;
+
+    public Kassa(Queue<Kunde> queue) {
+        this.queue = queue;
+        this.id = nextId++;
+    }
+
+    public double getSaldo() {
+        return this.saldo;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!isInterrupted()) {
+                synchronized (queue) {
+                    if (queue.isEmpty()) {
+                        System.out.println("Kassa " + this.id + " wartet auf neuen Kunden");
+                        queue.wait();
+                    } else {
+                        Kunde polled = queue.poll();
+                        this.saldo += polled.getWarenwert();
+                        System.out.println("Kassa " + this.id + ": Zahlung von " + polled.toString());
+                    }
+                }
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException ignore) {
+        }
+
+        if (!queue.isEmpty()) {
+            System.out.println("Supermarkt schließt, letzte Kunden der Kassa " + this.id + " werden abgearbeitet");
+
+            try {
+                while (!queue.isEmpty()) {
+                    synchronized (queue) {
+                        if (!queue.isEmpty()) {
+                            Kunde polled = queue.poll();
+                            this.saldo += polled.getWarenwert();
+                            System.out.println("Kassa " + this.id + ": Zahlung von " + polled.toString());
+                            queue.notifyAll();
+                        }
+                        Thread.sleep(200);
+                    }
+                }
+            } catch (InterruptedException ignore) {
+            }
+
+            System.out.println("Kassa " + this.id + " schließt");
+        }
+    }
+}

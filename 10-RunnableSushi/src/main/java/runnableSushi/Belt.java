@@ -18,7 +18,7 @@ public class Belt extends Thread {
      * @return true if the position is valid, false otherwise
      */
     public boolean isValidPosition(int pos) {
-        return pos < foodArr.length || pos >= 0;
+        return pos < foodArr.length && pos >= 0;
     }
 
     /**
@@ -54,7 +54,7 @@ public class Belt extends Thread {
      * @param pos  The position on the belt where the food should be added
      * @return true if the food was added successfully, false otherwise
      */
-    public synchronized boolean add(Food food, int pos) {
+    public boolean add(Food food, int pos) {
         boolean isAdded = false;
         if (isValidPosition(pos) && isFreeAtPosition(pos)) {
             foodArr[pos] = food;
@@ -69,7 +69,7 @@ public class Belt extends Thread {
      * @param pos The position on the belt where the food should be removed
      * @return The food that was removed or null if there was no food at the given position
      */
-    public synchronized Food remove(int pos) {
+    public Food remove(int pos) {
         Food toReturn = null;
         if (isValidPosition(pos) && !isFreeAtPosition(pos)) {
             toReturn = foodArr[pos];
@@ -122,8 +122,8 @@ public class Belt extends Thread {
             try {
                 synchronized (this) {
                     move();
-                    this.notifyAll();
                     System.out.println(this.toString());
+                    this.notifyAll();
                 }
                 Thread.sleep(500);
             } catch (InterruptedException ignore) {

@@ -7,6 +7,7 @@ public class GuestBehaviour implements ConsumerBehaviour {
     public void consume(List<Food> foodList, Belt belt, int pos, String name) {
         while (!Thread.interrupted()) {
             try {
+                Thread.sleep((int) (1000 + Math.random() * 5001));
                 synchronized (belt) {
                     while (belt.isFreeAtPosition(pos)) {
                         belt.wait();
@@ -16,7 +17,6 @@ public class GuestBehaviour implements ConsumerBehaviour {
 
                     System.out.printf("*** %s consumed %s at position %d\n", name, food.getId(), pos);
                 }
-                Thread.sleep((int) (1000 + Math.random() * 5001));
             } catch (InterruptedException ignore) {
                 break;
             }
