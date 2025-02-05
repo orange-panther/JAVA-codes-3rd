@@ -12,7 +12,7 @@ public record Match(String Gruppe,
                     int Gasttore,
                     int HZHeimtore,
                     int HZGasttore
-                    ) {
+) {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
@@ -31,12 +31,12 @@ public record Match(String Gruppe,
         return string.toString();
     }
 
-    public String getWinner(){
+    public String getWinner() {
         String winner = "unentschieden";
 
-        if(Heimtore > Gasttore){
+        if (Heimtore > Gasttore) {
             winner = Heimmannschaft;
-        } else if (Gasttore > Heimtore){
+        } else if (Gasttore > Heimtore) {
             winner = Gastmannschaft;
         }
 
