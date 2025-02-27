@@ -8,7 +8,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TextArea?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<!-- fx:controller ruft den Controller auf, der dann die Funktionen enthält -->
+<VBox alignment="CENTER_LEFT" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.javafxdecodeencode.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -23,11 +24,12 @@
         <TextField fx:id="txtKey" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
         <Button text="Recalc" prefWidth="100" GridPane.rowIndex="1" GridPane.columnIndex="2" onAction="#onRecalcButtonClicked"/>
     </GridPane>
+
     <Label text="Plain text:"/>
     <TextArea fx:id="txtPlainText" prefHeight="400"/>
 
-    <Button text="Encrypt" />
-
     <Label text="Encrypted text:"/>
     <TextArea fx:id="txtEncryptedText" prefHeight="400"/>
+
+    <Button text="Save" onAction="#onSafeButtonClicked"/>
 </VBox>
