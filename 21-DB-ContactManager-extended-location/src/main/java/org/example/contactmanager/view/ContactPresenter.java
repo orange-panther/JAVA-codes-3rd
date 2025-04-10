@@ -6,11 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
-import javafx.util.converter.FormatStringConverter;
 import javafx.util.converter.NumberStringConverter;
-import org.example.contactmanager.model.Contact;
-import org.example.contactmanager.model.ContactRepository;
-import org.example.contactmanager.model.ContactType;
+import org.example.contactmanager.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,11 +21,14 @@ public class ContactPresenter {
 
     private final ContactRepository contactRepository;
     private final ObservableList<Contact> contactList = FXCollections.observableArrayList();
+    private final LocationRepository locationRepository;
+    private final ObservableList<Location> locationList = FXCollections.observableArrayList();
 
     private ContactPresenter(ContactView view) {
         this.view = view;
 
         this.contactRepository = new ContactRepository();
+        this.locationRepository = new LocationRepository();
         bindViewToModel();
         attachEvents();
         addListeners();
@@ -38,6 +38,7 @@ public class ContactPresenter {
     private void init() {
         // load contacts from db
         reloadContactList();
+        loadLocationList();
         setEditMode(view.getBtnSave(), false);
         clearFields();
     }
@@ -48,6 +49,7 @@ public class ContactPresenter {
         view.getTfAddress().textProperty().bindBidirectional(detailedContact.phoneProperty());
         view.getTfPhone().textProperty().bindBidirectional(detailedContact.addressProperty());
         view.getCbContactType().setItems(FXCollections.observableArrayList(ContactType.values()));
+        view.getCbLocation().setItems(locationList);
     }
 
     private void buildTreeView() {
@@ -91,6 +93,7 @@ public class ContactPresenter {
                 setEditMode(view.getBtnSave(), false);
                 setDetailedContact(newContact);
                 view.getCbContactType().setValue(detailedContact.getType());
+                view.getCbLocation().setValue(detailedContact.getLocation());
             }
         });
     }
@@ -99,6 +102,11 @@ public class ContactPresenter {
         contactList.clear();
         contactList.addAll(contactRepository.getAllContact());
         buildTreeView();
+    }
+
+    private void loadLocationList() {
+        locationList.clear();
+        locationList.addAll(locationRepository.getAllLocation());
     }
 
     private void searchContact() {
@@ -110,7 +118,9 @@ public class ContactPresenter {
                     selectContactInTreeView(contact);
                     // set the contact in the detailed contact view
                     setDetailedContact(contact);
+                    //TODO: schauen obma des brauchen
                     view.getCbContactType().setValue(detailedContact.getType());
+                    view.getCbLocation().setValue(detailedContact.getLocation());
                     break;
                 }
             }
@@ -123,6 +133,7 @@ public class ContactPresenter {
                 view.getTfName(),
                 view.getTfPhone(),
                 view.getTfAddress(),
+                view.getCbLocation(),
                 view.getCbContactType()}, false);
 
         detailedContact.setValues(contact);
@@ -141,6 +152,7 @@ public class ContactPresenter {
         view.getTfName().clear();
         view.getTfPhone().clear();
         view.getTfAddress().clear();
+        view.getCbLocation().setValue(null);
         view.getCbContactType().setValue(ContactType.NONE);
     }
 
@@ -161,13 +173,12 @@ public class ContactPresenter {
 
     private void newContact() {
         clearFields();
-        int nextId = contactRepository.getLastId() + 1;
-        view.getTfId().setText(String.valueOf(nextId));
 
         setEditMode(new Node[]{
                 view.getTfName(),
                 view.getTfPhone(),
                 view.getTfAddress(),
+                view.getCbLocation(),
                 view.getCbContactType(),
                 view.getBtnSave()}, true);
         setEditMode(view.getTfId(), false);
@@ -178,6 +189,7 @@ public class ContactPresenter {
                 view.getTfName(),
                 view.getTfPhone(),
                 view.getTfAddress(),
+                view.getCbLocation(),
                 view.getCbContactType(),
                 view.getBtnSave()}, true);
         setEditMode(view.getTfId(), false);
@@ -189,12 +201,14 @@ public class ContactPresenter {
             String name = view.getTfName().getText();
             String phone = view.getTfPhone().getText();
             String address = view.getTfAddress().getText();
+            Location location = view.getCbLocation().getValue();
             ContactType type = view.getCbContactType().getValue();
 
             if (name == null || name.trim().isEmpty()
                     || phone == null || phone.trim().isEmpty()
-                    || address == null || phone.trim().isEmpty()
-                    || type == null) {
+                    || address == null || address.trim().isEmpty()
+                    || type == null
+                    || location == null) {
                 System.out.println("Contact Input was empty.");
                 return;
             } else if (type == ContactType.NONE) {
@@ -202,16 +216,15 @@ public class ContactPresenter {
                 return;
             }
 
-            Contact newContact = new Contact(id, name, phone, address, type);
+            Contact newContact = new Contact(id, name, phone, address, location, type);
 
             if (contactRepository.existsContact(id)) {
                 contactRepository.updateContact(newContact);
             } else {
-                contactRepository.addContact(name, phone, address, type);
+                contactRepository.addContact(name, phone, address, location, type);
             }
 
             reloadContactList();
-
             selectContactInTreeView(newContact);
 
             setEditMode(new Node[]{
@@ -219,6 +232,7 @@ public class ContactPresenter {
                     view.getTfName(),
                     view.getTfPhone(),
                     view.getTfAddress(),
+                    view.getCbLocation(),
                     view.getCbContactType(),
                     view.getBtnSave()}, false);
 
@@ -232,12 +246,12 @@ public class ContactPresenter {
 
         if (root == null) return;
 
-        for(TreeItem<Object> typeNode : root.getChildren()){
-            if(typeNode.getValue() instanceof ContactType contactType
+        for (TreeItem<Object> typeNode : root.getChildren()) {
+            if (typeNode.getValue() instanceof ContactType contactType
                     && contactType == targetContact.getType()) {
 
-                for(TreeItem<Object> contactNode : typeNode.getChildren()) {
-                    if(contactNode.getValue() instanceof Contact contact
+                for (TreeItem<Object> contactNode : typeNode.getChildren()) {
+                    if (contactNode.getValue() instanceof Contact contact
                             && contact.getId() == targetContact.getId()) {
 
                         typeNode.setExpanded(true);

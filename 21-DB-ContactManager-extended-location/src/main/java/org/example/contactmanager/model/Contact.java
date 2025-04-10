@@ -7,17 +7,19 @@ public class Contact {
     private StringProperty name = new SimpleStringProperty();
     private StringProperty phone = new SimpleStringProperty();
     private StringProperty address = new SimpleStringProperty();
+    private ObjectProperty<Location> location = new SimpleObjectProperty<>();
     private ObjectProperty<ContactType> type = new SimpleObjectProperty<>();
 
     public Contact() {
 
     }
 
-    public Contact(int id, String name, String phone, String address, ContactType type) {
+    public Contact(int id, String name, String phone, String address, Location location, ContactType type) {
         setId(id);
         setName(name);
         setPhone(phone);
         setAddress(address);
+        setLocation(location);
         setType(type);
     }
 
@@ -25,16 +27,19 @@ public class Contact {
         setId(other.getId());
         setName(other.getName());
         setAddress(other.getAddress());
+        setLocation(other.getLocation());
         setPhone(other.getPhone());
+        setType(other.getType());
     }
 
     @Override
     public String toString() {
-        return "%d: %s (%s, %s)".formatted(
+        return "%d: %s (%s, %s, %s)".formatted(
                 getId(),
                 getName(),
                 getPhone(),
-                getAddress()
+                getAddress(),
+                getLocation().toString()
         );
     }
 
@@ -96,5 +101,17 @@ public class Contact {
 
     public void setType(ContactType type) {
         this.type.set(type);
+    }
+
+    public Location getLocation() {
+        return location.get();
+    }
+
+    public ObjectProperty<Location> locationProperty() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location.set(location);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.contactmanager.model.Contact;
 import org.example.contactmanager.model.ContactType;
+import org.example.contactmanager.model.Location;
 
 public class ContactView {
     // root
@@ -15,7 +16,7 @@ public class ContactView {
     // Search
     private final HBox hBoxSearch = new HBox();
     private final TextField tfSearchText = new TextField();
-    private final Button btnSearch = new Button("Suchen");
+    private final Button btnSearch = new Button("Search");
 
     // Contact list
     private final TreeView<Object> tvContacts = new TreeView<>();
@@ -30,7 +31,9 @@ public class ContactView {
     private final TextField tfPhone = new TextField();
     private final Label labelAddress = new Label("Address:");
     private final TextField tfAddress = new TextField();
-    private final Label labelContactType = new Label("Kontakttyp");
+    private final Label labelLocation = new Label("Location");
+    private final ComboBox<Location> cbLocation = new ComboBox<>();
+    private final Label labelContactType = new Label("Contact Type");
     private final ComboBox<ContactType> cbContactType = new ComboBox<>();
 
     // Editor Buttons
@@ -67,8 +70,10 @@ public class ContactView {
         gridPaneDetails.add(tfPhone, 1, 2);
         gridPaneDetails.add(labelAddress, 0, 3);
         gridPaneDetails.add(tfAddress, 1, 3);
-        gridPaneDetails.add(labelContactType, 0, 4);
-        gridPaneDetails.add(cbContactType, 1, 4);
+        gridPaneDetails.add(labelLocation, 0, 4);
+        gridPaneDetails.add(cbLocation, 1, 4);
+        gridPaneDetails.add(labelContactType, 0, 5);
+        gridPaneDetails.add(cbContactType, 1, 5);
 
         // Editor Buttons
         hBoxEditorButtons.setSpacing(15);
@@ -125,6 +130,8 @@ public class ContactView {
     public TextField getTfId() {
         return tfId;
     }
+
+    public ComboBox<Location> getCbLocation() { return cbLocation; }
 
     public ComboBox<ContactType> getCbContactType() {
         return cbContactType;
