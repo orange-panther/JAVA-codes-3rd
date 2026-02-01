@@ -197,12 +197,17 @@ public class ContactPresenter {
 
     private void saveContact() {
         try {
-            int id = Integer.parseInt(view.getTfId().getText());
+            String idString = view.getTfId().getText();
             String name = view.getTfName().getText();
             String phone = view.getTfPhone().getText();
             String address = view.getTfAddress().getText();
             Location location = view.getCbLocation().getValue();
             ContactType type = view.getCbContactType().getValue();
+
+            int id = -1;
+            if (idString != "") {
+                id = Integer.parseInt(idString);
+            }
 
             if (name == null || name.trim().isEmpty()
                     || phone == null || phone.trim().isEmpty()
